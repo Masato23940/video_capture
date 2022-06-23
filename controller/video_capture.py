@@ -3,10 +3,11 @@ import threading
 import time
 import cv2
 import datetime
+import threading
 
 class Camera():
     def __init__(self):
-        self.isActivated = False
+        self.isRecording = False
         self.DEV_ID = 0
         self.WIDTH = 640
         self.HEIGHT = 480
@@ -25,14 +26,14 @@ class Camera():
     def prepare_codec(self):
         # file name
         date = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        path = "../../Videos/Capture_Video/" + date + ".mp4"
+        path = "../../../Videos/Capture_Video/" + date + ".mp4"
     
         # video parameters for codec 
         fourcc = cv2.VideoWriter_fourcc('m','p','4','v')
         self.out = cv2.VideoWriter(path, fourcc, self.FPS, (self.WIDTH, self.HEIGHT))
         
     def start(self):
-        self.isActivated = True
+        self.isRecording = True
         self.set_capture_params()
         self.prepare_codec()
         #while True
@@ -44,14 +45,14 @@ class Camera():
         self.out.write(frame)
         
     def stop(self):
-        self.isActivated = False
+        self.isRecording = False
         self.close()
         
     def close(self):
         self.cap.release()
         self.out.release()
         cv2.destroyAllWindows()
-        print("closed")
+#         print("closed")
         
     def capture_CPT_for(self,REC_SEC):
         self.start()
@@ -64,7 +65,7 @@ class Camera():
         while True:
             if  time.time()-start_time > REC_SEC:
                 break
-            elif camera.isActivated:
+            elif camera.isRecording:
                 camera.capture()
             else:
                 camera.start()
