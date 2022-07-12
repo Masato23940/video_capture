@@ -15,26 +15,22 @@ class YouTubeLive():
         self.WIDTH = 640
         self.HEIGHT = 480
         self.FPS = 30
-        self.cmd = 'Live_v2'
-        self.script_path = '/home/pi/Documents/Live/Live_v2.sh'
+        self.cmd = "/home/pi/Documents/Live/Live_v2.sh"
         
     def start(self):
         self.isRecording = True
-        tokens = shlex.split(self.cmd)
-        self.proc = subprocess.Popen(['sh', self.script_path], stdout=subprocess.PIPE)
-#              
+#         self.proc = subprocess.Popen("exec " + self.cmd, shell=True)
+        self.proc = subprocess.Popen(self.cmd, stdout=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
+        
     def stop(self):
-#         self.proc.taskkill()
-        self.proc.terminate()
-#         os.killpg(os.getpgid(self.proc.pid), signal.SIGTERM)
-#     def close(self):
-#         
+#         self.proc.kill()
+        os.killpg(os.getpgid(self.proc.pid), signal.SIGTERM)
         
 if __name__ == '__main__':
     live = YouTubeLive()
-    #camera.capture_CPT_for(10)
     live.start()
     time.sleep(20)
     live.stop()
+    exit()
 
 
