@@ -15,7 +15,7 @@ class YouTubeLive():
         self.WIDTH = 640
         self.HEIGHT = 480
         self.FPS = 30
-        self.cmd = "/home/pi/Documents/Live/Live_v2.sh"
+        self.cmd = "./Live_v2.sh"
         
     def start(self):
         self.isRecording = True
